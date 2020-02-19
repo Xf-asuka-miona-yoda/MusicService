@@ -38,7 +38,7 @@ public class player extends AppCompatActivity implements View.OnClickListener{
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             musicBinder = (MusicService.MusicBinder) service;
-            musicBinder.initmediaplayer();
+            musicBinder.initmediaplayer(MusicQueue.i);
             seekBar.setMax(musicBinder.mediaPlayer.getDuration());
             musicLength.setText(format.format(musicBinder.mediaPlayer.getDuration())+"");
             musicCur.setText("00:00");
@@ -76,6 +76,7 @@ public class player extends AppCompatActivity implements View.OnClickListener{
         Button play = (Button) findViewById(R.id.play);
         Button pause = (Button) findViewById(R.id.pause);
         Button stop = (Button) findViewById(R.id.stop);
+        Button next = (Button) findViewById(R.id.next);
 
         musicLength = (TextView) findViewById(R.id.music_length);
         musicCur = (TextView) findViewById(R.id.music_cur);
@@ -86,6 +87,7 @@ public class player extends AppCompatActivity implements View.OnClickListener{
         play.setOnClickListener(this);
         pause.setOnClickListener(this);
         stop.setOnClickListener(this);
+        next.setOnClickListener(this);
 
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
@@ -98,7 +100,7 @@ public class player extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (musicBinder.musicurl == ""){ //如果当前播放器为空或者与要播放的音乐不一直，初始化播放器
-            musicBinder.initmediaplayer();
+            musicBinder.initmediaplayer(MusicQueue.i);
             seekBar.setMax(musicBinder.mediaPlayer.getDuration());
             musicLength.setText(format.format(musicBinder.mediaPlayer.getDuration())+"");
             musicCur.setText("00:00");
@@ -115,6 +117,12 @@ public class player extends AppCompatActivity implements View.OnClickListener{
             case R.id.stop:
                 musicBinder.stop();
                 break;
+            case R.id.next:   //上一首同理即可，后续要增加一下判断是否为最后一个或第一个
+                musicBinder.stop();
+                musicBinder.initmediaplayer(MusicQueue.i+1);
+                musicBinder.play();
+                break;
+
             default:
                 break;
         }

@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode){
             case 1:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    musicBinder.initmediaplayer();
+                    musicBinder.initmediaplayer(0);
                 } else {
                     Toast.makeText(this, "拒绝将导致程序无法使用", Toast.LENGTH_SHORT).show();
                     finish();
@@ -78,16 +78,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 musicBinder.stop();
                 File file = new File(Environment.getExternalStorageDirectory(),"起风了.mp3");
                 MusicQueue.Music qifengle = new MusicQueue.Music("起风了","吴青峰", file.getPath());
-                MusicQueue.queue.offer(qifengle);
-                musicBinder.initmediaplayer();
+                if (!musicQueue.isinclude(qifengle.musicname)){
+                    MusicQueue.queue.addElement(qifengle);
+                }
+                MusicQueue.i = musicQueue.getindex(qifengle.musicname);
+                musicBinder.initmediaplayer(MusicQueue.i);
                 musicBinder.play();
                 break;
             case R.id.qianli:
                 musicBinder.stop();
                 File file1 = new File(Environment.getExternalStorageDirectory(),"千里行走.mp3");
                 MusicQueue.Music qianli = new MusicQueue.Music("千里行走", "暗杠、寅子", file1.getPath());
-                MusicQueue.queue.offer(qianli);
-                musicBinder.initmediaplayer();
+                if (!musicQueue.isinclude(qianli.musicname)){
+                    MusicQueue.queue.addElement(qianli);
+                }
+                MusicQueue.i = musicQueue.getindex(qianli.musicname);
+                musicBinder.initmediaplayer(MusicQueue.i);
                 musicBinder.play();
                 break;
             case R.id.xiangqing:

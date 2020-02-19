@@ -18,9 +18,9 @@ public class MusicService extends Service {
         MusicQueue musicQueue = new MusicQueue();
         public MediaPlayer mediaPlayer = new MediaPlayer();
         public String musicurl = "";
-        public void initmediaplayer(){
+        public void initmediaplayer(int i){
             try {
-                musicurl = MusicQueue.queue.poll().musicurl;
+                musicurl = MusicQueue.queue.get(i).musicurl;
                 mediaPlayer.setDataSource(musicurl);
                 mediaPlayer.prepare();
                 mediaPlayer.setLooping(true);
